@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: slicer
+      POSTGRES_PASSWORD: slicer
+    volumes:
+      - ./.data:/var/lib/postgresql/data
+  redis:
+    image: redis
+  web:
+    build: .
+    command: ./manage.py serve -r
+    volumes:
+      - .:/opt/slicer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
